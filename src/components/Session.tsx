@@ -196,11 +196,6 @@ export default function Session() {
               {Array.from({ length: GAME_COUNT }, (_, i) => (
                 <th key={i} className={`border border-gray-300 text-center py-2 text-xs font-bold w-16 ${COL_HEADER[i]}`}>
                   GAME #{i + 1}
-                  {GAME_MULTIPLIERS[i] > 1 && (
-                    <div className={`text-[10px] font-black mt-0.5 ${GAME_MULTIPLIERS[i] === 3 ? "text-red-600" : "text-indigo-600"}`}>
-                      ×{GAME_MULTIPLIERS[i]}
-                    </div>
-                  )}
                 </th>
               ))}
             </tr>
