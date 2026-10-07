@@ -151,7 +151,7 @@ function ScoreCell({ gameIndex, category, value, colColor, onCommit }: {
 }
 
 export default function Session() {
-  const { state, scoreCategory, addBonusYahtzee, reset } = useGame();
+  const { state, scoreCategory, addBonusYahtzee, removeBonusYahtzee, reset } = useGame();
   const { games } = state;
   const grandTotal = getSessionGrandTotal(games);
 
@@ -266,6 +266,11 @@ export default function Session() {
               {games.map((g, i) => (
                 <td key={i} className={`border border-gray-300 text-center text-sm w-16 ${COL_COLORS[i]}`}>
                   <div className="flex items-center justify-center gap-1">
+                    <button
+                      onClick={() => removeBonusYahtzee(i)}
+                      disabled={!g.scores.bonusYahtzees}
+                      className="w-4 h-4 rounded-full bg-indigo-200 text-indigo-700 text-[10px] font-bold hover:bg-indigo-300 transition-colors leading-none disabled:opacity-30 disabled:cursor-not-allowed"
+                    >−</button>
                     <span className="font-semibold text-gray-700 text-xs">{g.scores.bonusYahtzees || ""}</span>
                     <button
                       onClick={() => addBonusYahtzee(i)}

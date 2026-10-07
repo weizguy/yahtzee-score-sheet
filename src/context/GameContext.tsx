@@ -10,6 +10,7 @@ type Action =
   | { type: "START" }
   | { type: "SCORE"; gameIndex: number; category: ScoreCategory; value: number }
   | { type: "ADD_BONUS_YAHTZEE"; gameIndex: number }
+  | { type: "REMOVE_BONUS_YAHTZEE"; gameIndex: number }
   | { type: "RESET" };
 
 function reducer(state: SessionState, action: Action): SessionState {
@@ -35,6 +36,15 @@ function reducer(state: SessionState, action: Action): SessionState {
       return { ...state, games };
     }
 
+    case "REMOVE_BONUS_YAHTZEE": {
+      const games = state.games.map((g) =>
+        g.index === action.gameIndex
+          ? { ...g, scores: { ...g.scores, bonusYahtzees: Math.max(0, g.scores.bonusYahtzees - 1) } }
+          : g
+      );
+      return { ...state, games };
+    }
+
     case "RESET":
       return { ...createSession(), started: false };
 
@@ -48,6 +58,7 @@ interface GameContextValue {
   start: () => void;
   scoreCategory: (gameIndex: number, category: ScoreCategory, value: number) => void;
   addBonusYahtzee: (gameIndex: number) => void;
+  removeBonusYahtzee: (gameIndex: number) => void;
   reset: () => void;
 }
 
@@ -63,6 +74,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
       scoreCategory: (gameIndex, category, value) =>
         dispatch({ type: "SCORE", gameIndex, category, value }),
       addBonusYahtzee: (gameIndex) => dispatch({ type: "ADD_BONUS_YAHTZEE", gameIndex }),
+      removeBonusYahtzee: (gameIndex) => dispatch({ type: "REMOVE_BONUS_YAHTZEE", gameIndex }),
       reset: () => dispatch({ type: "RESET" }),
     }}>
       {children}
